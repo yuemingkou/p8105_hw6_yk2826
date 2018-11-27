@@ -69,3 +69,25 @@ fit_logistic %>%
 ```
 
 The estimate of the adjusted odds ratio for solving homicides comparing non-white victims to white victims keeping all other variables fixed is 0.441 and the 95% confidence interval is (0.313, 0.620).
+
+### For each city
+
+Create a dataframe with estimated ORs and CIs for each city:
+
+```{r ors_cis}
+or_df = 
+  homicide_df %>% 
+  group_by(city_state) %>% 
+  nest() %>% 
+  mutate(resolved_logistic = 
+         map(data, ~glm(resolved ~ victim_age + victim_sex + victim_race, data = ., family = binomial())),
+         resolved_logistic = map(resolved_logistic, broom::tidy)) %>% 
+  select(city_state, resolved_logistic) %>% 
+  unnest() %>% 
+  filter(term == "victim_raceNon-White") %>% 
+  mutate(OR = exp(estimate), 
+         lower_limit = exp(estimate - qnorm(0.975)*std.error), 
+         upper_limit = exp(estimate + qnorm(0.975)*std.error)) %>% 
+  select(city_state, OR, lower_limit, upper_limit) 
+or_df
+```
