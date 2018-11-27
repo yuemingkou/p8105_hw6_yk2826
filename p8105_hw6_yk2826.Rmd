@@ -19,3 +19,24 @@ theme_set(theme_bw() + theme(legend.position = "bottom"))
 set.seed(1)
 ```
 
+## Problem 1
+
+### Import and manipulate data
+
+```{r read_data, message = FALSE, warning = FALSE}
+homicide_df = 
+  read_csv("./homicide-data.csv") %>% 
+  mutate(city_state = str_c(city, ", ", state),
+         resolved = as.numeric(disposition == "Closed by arrest")) %>% 
+  filter(!(city_state %in% c("Dallas, TX", "Phoenix, AZ", 
+                             "Kansas City, MO", "Tulsa, AL"))) %>% 
+  mutate(victim_race = ifelse(victim_race != "White", "Non-White", "White"),
+         victim_race = fct_relevel(victim_race, "White"),
+         victim_age = as.numeric(victim_age)) %>% 
+  select(city_state, resolved, everything())
+
+homicide_df
+str(homicide_df)
+```
+
+This dataset contains `r nrow(homicide_df)` observations, where each observation is a case of homicide. There are 14 variables in this dataset, including the location of the killing, whether the homicide was solved and basic demographic information about each victim.
