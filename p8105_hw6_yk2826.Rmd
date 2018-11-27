@@ -138,3 +138,31 @@ sum(is.na(bwt_data))
 ```
 
 This dataset contains `r nrow(bwt_data)` observations with no missing data. I converted numeric to factor where appropriate.
+
+### Model building
+
+Exploratory analyses:
+
+```{r}
+bwt_data %>% 
+  ggplot(aes(x = bwt)) + 
+  geom_histogram() + 
+  labs(title = "Histogram plot of birthweight",
+       x = "Birthweight", 
+       y = "Count")
+```
+
+From the histogram plot, baby's birth weight appears to be normally distributed which satisfies the linear regression model assumptions.
+
+Propose a regression model for birthweight:
+
+```{r modeling}
+mult.fit = lm(bwt ~ ., data = bwt_data)
+step(mult.fit, direction = 'backward')
+
+model_my = lm(bwt ~ babysex + bhead + blength + delwt + fincome + 
+              gaweeks + mheight + mrace + parity + ppwt + smoken, data = bwt_data)
+summary(model_my)
+```
+
+*Description of my modeling process:* First, I checked the distribution of the outcome -- birth weight and it turned out to be normally distributed, so I decided to build a linear regression model. Then I used stepwise regression procedure to select variables and a single regression model is identified as the 'best' model in the end of the stepwise regression. 'Step' function uses AIC criterion for variable selection and the default option is 'backward'. I picked the final model as my model, which includes 11 predictors -- baby's sex, baby's head circumference at birth (centimeters), baby's length at birth (centimeteres), mother's weight at delivery (pounds), family monthly income (in hundreds, rounded), gestational age in weeks, mother's height (inches), mother's race, number of live births prior to this pregnancy, mother's pre-pregnancy weight (pounds), and average number of cigarettes smoked per day during pregnancy.
