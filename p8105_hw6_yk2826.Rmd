@@ -166,3 +166,21 @@ summary(model_my)
 ```
 
 *Description of my modeling process:* First, I checked the distribution of the outcome -- birth weight and it turned out to be normally distributed, so I decided to build a linear regression model. Then I used stepwise regression procedure to select variables and a single regression model is identified as the 'best' model in the end of the stepwise regression. 'Step' function uses AIC criterion for variable selection and the default option is 'backward'. I picked the final model as my model, which includes 11 predictors -- baby's sex, baby's head circumference at birth (centimeters), baby's length at birth (centimeteres), mother's weight at delivery (pounds), family monthly income (in hundreds, rounded), gestational age in weeks, mother's height (inches), mother's race, number of live births prior to this pregnancy, mother's pre-pregnancy weight (pounds), and average number of cigarettes smoked per day during pregnancy.
+
+Show a plot of model residuals against fitted values:
+
+```{r residuals_plot}
+bwt_data %>% 
+  add_predictions(model_my) %>% 
+  add_residuals(model_my) %>% 
+  ggplot(aes(x = pred, y = resid)) +
+  geom_point() +
+  geom_smooth(se = FALSE) +
+  labs(
+        title = "Plot of Model Residuals VS Fitted Values",
+        x = "Predictions",
+        y = "Residuals"
+      ) 
+```
+
+The above scatter plot shows the relationship between predicted values and residuals for the my model. It appears that the equality of variance assumption is not holding when the predicted values of birth weight are very low and that outliers are present. However, for most observatons, residuals form a horizontal (linear) band around zero, which indicates equal variance.
