@@ -1,0 +1,21 @@
+---
+title: "Homework 6"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(modelr)
+library(mgcv)
+library("leaps")
+
+knitr::opts_chunk$set(
+  fig.width = 9,
+  fig.asp = .8,
+  out.width = "90%"
+)
+theme_set(theme_bw() + theme(legend.position = "bottom"))
+set.seed(1)
+```
+
