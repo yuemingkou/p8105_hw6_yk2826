@@ -109,3 +109,32 @@ or_df %>%
 ```
 
 The above plot shows the estimated ORs and CIs for solving homicides comparing non-white victims to white victims for each city, ordered from most to least. According to the plot, the estimated adjusted OR in most cities for solving homicides comparing non-white to white victims is less than 1, which means in most cities, homicides in which the victim is non-white are less likely to be resolved than those in which the victim is white. Tampa, Florida and Birmingham, Alabama are the only two cities with estimated ORs greater than one, however, both estimates have very wide confidence intervals. In addition, about half of the cities have confidence intervals that include 1.
+
+## Problem 2
+
+### Import data
+
+Load and clean the data for regression analysis:
+
+```{r clean_data}
+bwt_data = read_csv("./birthweight.csv")
+bwt_data =
+  bwt_data %>% 
+  mutate(babysex = as.factor(recode(babysex, '1' = 'Male', '2' = 'Female')), 
+         frace = as.factor(recode(frace, `1` = 'White', `2` = 'Black', 
+                               `3` = 'Asian', `4` = 'Puerto Rican', 
+                               `8` = 'Other', `9` = 'Unknown')), 
+         malform = as.factor(ifelse(malform == 1, "present", "absent")), 
+         mrace = as.factor(recode(mrace, `1` = 'White', `2` = 'Black',
+                               `3` = 'Asian', `4` = 'Puerto Rican',
+                               `8` = 'Other'))) %>% 
+  select(bwt, everything())
+bwt_data
+```
+
+Check for missing data:
+```{r check_missing}
+sum(is.na(bwt_data))
+```
+
+This dataset contains `r nrow(bwt_data)` observations with no missing data. I converted numeric to factor where appropriate.
