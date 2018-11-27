@@ -40,3 +40,18 @@ str(homicide_df)
 ```
 
 This dataset contains `r nrow(homicide_df)` observations, where each observation is a case of homicide. There are 14 variables in this dataset, including the location of the killing, whether the homicide was solved and basic demographic information about each victim.
+
+### For the city of Baltimore, MD
+
+First, fit a logistic regression with resolved vs unresolved as the outcome and victim age, sex and race as predictors. 
+```{r logistic_regression}
+baltimore_df = filter(homicide_df, city == "Baltimore")
+
+fit_logistic = 
+  baltimore_df %>% 
+  glm(resolved ~ victim_age + victim_sex + victim_race, data = ., family = binomial()) %>% 
+  broom::tidy()
+fit_logistic
+```
+
+Homicides in which the victim is non-white are substantially less likely to be resolved than those in which the victim is white. Homicides in which the victim is male are significantly less likely to be resolved than those in which the victim is female. The effect of age is statistically significant, but careful data inspections should be conducted before interpreting too deeply.
